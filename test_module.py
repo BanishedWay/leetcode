@@ -1,39 +1,49 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"a test module"
+"a test module for test"
 
 __author__ = "BanishedWay"
 
-import sys
+# 使用doctest测试Dict类
 
 
-def test():
-    args = sys.argv
-    if len(args) == 1:
-        print("Hello world!")
-    elif len(args) == 2:
-        print("Hello %s" % args[1])
-    else:
-        print("Too many arguments!")
+class Dict(dict):
+    """
+    Simple dict but also support access as x.y style.
+
+    >>> d1=Dict()
+    >>> d1["x"]=100
+    >>> d1.x
+    100
+    >>> d1.y=200
+    >>> d1["y"]
+    200
+    >>> d2=Dict(a=1,b=2,c="3")
+    >>> d2.c
+    '3'
+    >>> d2["empty"]
+    Traceback (most recent call last):
+      ...
+    KeyError: 'empty'
+    >>> d2.empty
+    Traceback (most recent call last):
+     ...
+    AttributeError: 'Dict' object has no attribute 'empty'
+    """
+
+    def __init__(self, **kw):
+        super(Dict, self).__init__(**kw)
+
+    def __getattr__(self, key):
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(r"'Dict' object has no attribute '%s'" % key)
+
+    def __setattr__(self, key, value):
+        self[key] = value
 
 
-class Student(object):
-
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-
-    def __str__(self):
-        return "Student(%s, %s)" % (self.name, self.age)
-
-    def __repr__(self):
-        return "Student(%s, %s)" % (self.name, self.age)
-
-    def __eq__(self, other):
-        return self.name == other.name and self.age == other.age
-
-
-if __name__ == "__main__":
-    test()
-    s = Student("BanishedWay", 18)
-    print(s)
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
