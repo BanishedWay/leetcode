@@ -19,9 +19,9 @@ def get_big_file(path, filesize):
             if size > filesize:
                 # 输出目标大文件的信息
                 size = size // (1024 * 1024)  # 转换为M
-                size = '{k}M'.format(k=size)
+                size = '{_size}M'.format(_size=size)
                 print(target_file, size)
 
 
 if __name__ == '__main__':
-    get_big_file('/home/ubuntu')
+    get_big_file('/home/ubuntu/documents/leetcode', 500 * 1024)
