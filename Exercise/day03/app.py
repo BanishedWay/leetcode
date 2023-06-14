@@ -52,9 +52,3 @@ def get_password(length):
     # 打乱顺序
     random.shuffle(password)
     return ''.join(password)
-
-
-if __name__ == '__main__':
-    print(get_password(8))
-    print(get_password(16))
-    print(get_password(4))
