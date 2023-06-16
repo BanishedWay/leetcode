@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import string
+import sys
+import random
 '制作密码生成器'
 
 __author__ = 'BanishedWay'
@@ -10,10 +13,6 @@ __author__ = 'BanishedWay'
 3. 至少包含一个大写字母
 4. 至少包含一个特殊符号
 """
-
-import random
-import sys
-import string
 
 
 # # 生成大写字母
@@ -70,12 +69,3 @@ def get_password(length=8):
                     for c in password) and any(c in string.punctuation
                                                for c in password):
             return password
-
-
-if __name__ == '__main__':
-    lst = sys.argv
-    if len(lst) <= 1:
-        length = 8
-    else:
-        length = int(sys.argv[1])
-    print(get_password(length))
