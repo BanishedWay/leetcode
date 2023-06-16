@@ -1,3 +1,3 @@
 # leetcode
-记录LeetCode学习代码
+记录Python学习历程
 
