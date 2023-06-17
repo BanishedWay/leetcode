@@ -4,11 +4,12 @@
 
 __author__ = "BanishedWay"
 
-import random
-from PIL import Image
-from PIL import ImageDraw
-from PIL import ImageFont
+import base64
 import os
+import random
+from io import BytesIO
+
+from PIL import Image, ImageDraw, ImageFont
 
 
 # 生成随机颜色
@@ -64,11 +65,40 @@ def noise(image, width=120, height=35, line_count=3, point_count=20):
         x2 = random.randint(0, width)
         y1 = random.randint(0, height)
         y2 = random.randint(0, height)  # 获取两个点的坐标
-        draw.line((x1, y1, x2, y2), fill=random_color())  # 在两点直接画线
+        draw.line((x1, y1, x2, y2), fill=random_color())  # 在两点之间画线
+
+        # 画点
+        for i in range(point_count):
+            draw.point([random.randint(0, width),
+                        random.randint(0, height)],
+                       fill=random_color())
+            # 画圆弧
+            x = random.randint(0, width)
+            y = random.randint(0, height)
+            draw.arc((x, y, x + 4, y + 4), 0, 90, fill=random_color())
+    return image
+
+
+# 将图片转为base64编码的图片
+def valid_code():
+    """
+    生成图片验证码，并对图片进行base64编码
+    """
+    image = generate_picture()
+    valid_str, image = draw_str(44, image, 35)
+    image = noise(image)
+
+    # 调用一个二级制输入流
+    f = BytesIO()
+    image.save(f, 'png')  # 将图片存入二进制输入流
+    data = f.getvalue()
+    f.close()
+
+    encode_data = base64.b64encode(data)  # 对data进行编码
+    data = str(encode_data, encoding='utf-8')  # 将编码后的数据存入data
+    img_data = 'data:image/jpeg;base64,{data}'.format(data=data)
+    return valid_str, img_data
 
 
 if __name__ == '__main__':
-    image = generate_picture()
-    valid_str, image = draw_str(4, image, 35)
-    print(valid_str)
-    image.save('test.jpg')
+    print(valid_code())
