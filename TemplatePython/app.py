@@ -5,6 +5,7 @@
 __author__ = 'BanishedWay'
 
 from flask import Flask, request, render_template
+from gevent import pywsgi
 
 app = Flask(__name__)
 
@@ -23,6 +24,7 @@ def signin_from():
 def signin():
     username = request.form['username']
     password = request.form['password']
+
     if username == 'admin' and password == '1234':
         return render_template('signin-ok.html', username=username)
     return render_template('form.html',
@@ -31,4 +33,6 @@ def signin():
 
 
 if __name__ == '__main__':
-    app.run()
+    ##  app.run()
+    server = pywsgi.WSGIServer(("0.0.0.0", 80), app)
+    server.serve_forever()
