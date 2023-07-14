@@ -1,1 +1,4 @@
 A txt file for test
+txt
+epub
+txt2
